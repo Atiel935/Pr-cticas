@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const jwtMiddleware = require('./jwtMiddleware');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -15,14 +16,17 @@ app.use((req, res, next) => {
 const productosRoutes = require('../routes/productos');
 const proveedoresRoutes = require('../routes/proveedores');
 const almacenamientoRoutes = require('../routes/almacenamiento');
-//const comprasRoutes = require('../routes/compras');
+const comprasRoutes = require('../routes/compras');
 const ventasRoutes= require('../routes/ventas');
+const administradorRouter= require('../routes/administradores');
 
-app.use('/productos', productosRoutes);
-app.use('/proveedores',proveedoresRoutes);
-app.use('/almacenamiento',almacenamientoRoutes);
-//app.use('/compras',comprasRoutes);
-app.use('/ventas',ventasRoutes);
+// Aplicar el middleware de verificación de token en las rutas que lo requieren
+app.use('/productos' ,productosRoutes);
+app.use('/proveedores', proveedoresRoutes);
+app.use('/almacenamiento', almacenamientoRoutes);
+app.use('/compras', comprasRoutes);
+app.use('/ventas', ventasRoutes);
+app.use('/administrador', administradorRouter);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
